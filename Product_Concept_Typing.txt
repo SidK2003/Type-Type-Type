@@ -1,0 +1,29 @@
+Project CodeBurn is a fun, open-source gamified activity tracker that measures the physical energy a user expends while typing. It brings a fitness-tracker mindset to your computer desk, running simultaneously as a Google Chrome Extension and a VS Code Extension using a single, shared JavaScript logic core.
+
+1. The Core Mechanics (How it Works)
+Instead of tracking what you type (which stays 100% private to prevent keylogging), the code simply listens to anonymized keypress signals.
+
+The Active Window: To prevent inaccurate tracking when you walk away from your desk, the engine uses a 2-second Idle Threshold. If you stop typing for more than 2 seconds, the timer pauses automatically.
+
+The Math: Based on the clinical scientific value for typing (1.3 METs), a standard 70kg user burns roughly 0.0265 calories per second of continuous typing.
+
+2. The Dynamic Fire Emoji Engine (The UI)
+To hook the user, the extension displays a color-shifting fire emoji in the browser nav bar and the VS Code status bar that instantly reacts to your moving 5-second typing speed window:
+
+🟢 Green Fire (0–15 WPM): Static and calm; you are typing casually or taking long pauses.
+
+🟠 Orange Fire (16–50 WPM): Triggers a smooth, gentle pulsing scale animation showing you are in a solid flow state.
+
+🔴 Red Fire (>50 WPM): Grows larger and triggers a high-frequency shaking animation to signal intense "rage-typing."
+
+3. Architecture Breakdown
+The project is organized cleanly as a Monorepo so you don't repeat your code:
+
+/shared-core/engine.js: The central math library processing timestamps, calculating calories, and changing active states.
+
+/chrome-extension/: Injects a background listener onto web pages using window.addEventListener('keydown').
+
+/vscode-extension/: Subscribes to the IDE text buffer adjustments using vscode.workspace.onDidChangeTextDocument.
+
+4. Privacy Guardrails
+Because key-tracking software can mimic malware, the engine is explicitly built to look at the event trigger only. It never reads or records the actual letters (event.key) you type, and all data is saved strictly inside the browser or IDE's local storage—never on a remote server. This will also be opensource/public github repo.
